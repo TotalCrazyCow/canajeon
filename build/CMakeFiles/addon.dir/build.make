@@ -44,19 +44,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/Cellar/cmake/3.30.0/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.30.0/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/Cellar/cmake/3.30.0/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.30.0/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/andy/Desktop/test_electron
+CMAKE_SOURCE_DIR = /Users/marco/Desktop/canajeon
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/andy/Desktop/test_electron/build
+CMAKE_BINARY_DIR = /Users/marco/Desktop/canajeon/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/addon.dir/depend.make
@@ -70,30 +70,46 @@ include CMakeFiles/addon.dir/progress.make
 include CMakeFiles/addon.dir/flags.make
 
 CMakeFiles/addon.dir/src/example.cpp.o: CMakeFiles/addon.dir/flags.make
-CMakeFiles/addon.dir/src/example.cpp.o: /Users/andy/Desktop/test_electron/src/example.cpp
+CMakeFiles/addon.dir/src/example.cpp.o: /Users/marco/Desktop/canajeon/src/example.cpp
 CMakeFiles/addon.dir/src/example.cpp.o: CMakeFiles/addon.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/andy/Desktop/test_electron/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/addon.dir/src/example.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/addon.dir/src/example.cpp.o -MF CMakeFiles/addon.dir/src/example.cpp.o.d -o CMakeFiles/addon.dir/src/example.cpp.o -c /Users/andy/Desktop/test_electron/src/example.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/marco/Desktop/canajeon/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/addon.dir/src/example.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/addon.dir/src/example.cpp.o -MF CMakeFiles/addon.dir/src/example.cpp.o.d -o CMakeFiles/addon.dir/src/example.cpp.o -c /Users/marco/Desktop/canajeon/src/example.cpp
 
 CMakeFiles/addon.dir/src/example.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/addon.dir/src/example.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/andy/Desktop/test_electron/src/example.cpp > CMakeFiles/addon.dir/src/example.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/marco/Desktop/canajeon/src/example.cpp > CMakeFiles/addon.dir/src/example.cpp.i
 
 CMakeFiles/addon.dir/src/example.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/addon.dir/src/example.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/andy/Desktop/test_electron/src/example.cpp -o CMakeFiles/addon.dir/src/example.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/marco/Desktop/canajeon/src/example.cpp -o CMakeFiles/addon.dir/src/example.cpp.s
+
+CMakeFiles/addon.dir/src/main.cpp.o: CMakeFiles/addon.dir/flags.make
+CMakeFiles/addon.dir/src/main.cpp.o: /Users/marco/Desktop/canajeon/src/main.cpp
+CMakeFiles/addon.dir/src/main.cpp.o: CMakeFiles/addon.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/marco/Desktop/canajeon/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/addon.dir/src/main.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/addon.dir/src/main.cpp.o -MF CMakeFiles/addon.dir/src/main.cpp.o.d -o CMakeFiles/addon.dir/src/main.cpp.o -c /Users/marco/Desktop/canajeon/src/main.cpp
+
+CMakeFiles/addon.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/addon.dir/src/main.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/marco/Desktop/canajeon/src/main.cpp > CMakeFiles/addon.dir/src/main.cpp.i
+
+CMakeFiles/addon.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/addon.dir/src/main.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/marco/Desktop/canajeon/src/main.cpp -o CMakeFiles/addon.dir/src/main.cpp.s
 
 # Object files for target addon
 addon_OBJECTS = \
-"CMakeFiles/addon.dir/src/example.cpp.o"
+"CMakeFiles/addon.dir/src/example.cpp.o" \
+"CMakeFiles/addon.dir/src/main.cpp.o"
 
 # External object files for target addon
 addon_EXTERNAL_OBJECTS =
 
 Release/addon.node: CMakeFiles/addon.dir/src/example.cpp.o
+Release/addon.node: CMakeFiles/addon.dir/src/main.cpp.o
 Release/addon.node: CMakeFiles/addon.dir/build.make
 Release/addon.node: CMakeFiles/addon.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/andy/Desktop/test_electron/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library Release/addon.node"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/marco/Desktop/canajeon/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library Release/addon.node"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/addon.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -105,6 +121,6 @@ CMakeFiles/addon.dir/clean:
 .PHONY : CMakeFiles/addon.dir/clean
 
 CMakeFiles/addon.dir/depend:
-	cd /Users/andy/Desktop/test_electron/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/andy/Desktop/test_electron /Users/andy/Desktop/test_electron /Users/andy/Desktop/test_electron/build /Users/andy/Desktop/test_electron/build /Users/andy/Desktop/test_electron/build/CMakeFiles/addon.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /Users/marco/Desktop/canajeon/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/marco/Desktop/canajeon /Users/marco/Desktop/canajeon /Users/marco/Desktop/canajeon/build /Users/marco/Desktop/canajeon/build /Users/marco/Desktop/canajeon/build/CMakeFiles/addon.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/addon.dir/depend
 
