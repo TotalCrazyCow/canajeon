@@ -1,11 +1,12 @@
+# Canajeon project
+
 ## Dependencies
 - CMake
 - Node.js
 
-
 ## Setting up development environment
-- Run install.sh -> installs required node.js packages
+- Run `install.sh` to install required node.js packages
 
 ## Running code
-- Run npm install -> compiles c++ code
-- Run npm start -> starts electron app
+- Run `npm install` to compile C++ code
+- Run `npm start` to start electron app

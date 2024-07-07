@@ -1,4 +1,3 @@
-#include <iostream>
 #include <vector>
 
 const int DIMENSION = 2;
@@ -9,7 +8,7 @@ struct Grid {
     double y[GRID_SIZE];
 };
 
-int main() {
+Grid drawGrid() {
 
     Grid domain;
     double x_min = 0;
@@ -24,8 +23,5 @@ int main() {
         domain.y[i] = y_min + i*step;
     }
 
-
-    std::cout << "ciaooo\n";
-
-    return 0;
+    return domain;
 }

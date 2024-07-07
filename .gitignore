@@ -1,6 +1,8 @@
 .vscode/
 build/
 package-lock.json
+*.bmp
+*.out
 
 # Logs
 logs
