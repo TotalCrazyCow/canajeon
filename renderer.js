@@ -14,6 +14,7 @@ const fetchAndInject = async () => {
 
 	// fetch from main
 	const newData = await window.mainAPI.fetchNext();
+	location.reload();
 	// inject
 	const information = document.getElementById('info');
 	information.innerText = `Message from main: ${newData}`

@@ -1,18 +1,18 @@
 #include "grid.hpp"
 
-std::string drawGrid(EasyBMP::Image& img, Grid& domain)
+std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 {
 	domain.getExtrema();
 
 	// bitmap file creation
-	for (int t = 0; t < STEP_NUMBER; t++)
-	{
+	//for (int t = 0; t < STEP_NUMBER; t++)
+	//{
 		colorBitmap(img, t, domain);
 		std::string fileName = "test" + std::to_string(t) + ".bmp";
 		std::string fileName2 = "test.bmp";
 		img.Write(fileName2);
 		//std::remove("test.bmp");
-	}
+	//}
 
 	// size_t totalSize = sizeof(domain);
 	// int bmpBufferElements = totalSize / sizeof(char);
@@ -24,15 +24,15 @@ std::string drawGrid(EasyBMP::Image& img, Grid& domain)
 	return "drawGrid() finito senza errori!\n";
 };
 
-int drawRoutine(void) {
+int drawRoutine(int step) {
 
-	std::string test = drawGrid(img, domain);
-	return 0;
+	std::string test = drawGrid(img, domain, step);
+	return step;
 };
 
 int main()
 {
-	drawRoutine();
+	drawRoutine(1);
 
 	return 0;
 }
@@ -40,8 +40,9 @@ int main()
 Napi::Number drawRoutineWrapped(const Napi::CallbackInfo &info)
 {
 	Napi::Env env = info.Env();
+	Napi::Number step = info[0].As<Napi::Number>();
 
-	Napi::Number returnValue = Napi::Number::New(env, drawRoutine());
+	Napi::Number returnValue = Napi::Number::New(env, drawRoutine(step.Int32Value()));
 
 	return returnValue;
 };
