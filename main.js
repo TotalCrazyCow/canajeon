@@ -22,17 +22,11 @@ const createWindow = () => {
 	win.loadFile('index.html')
 }
 
+
 const handleDrawReq = () => {
 
 	test_draw = drawRoutine(step++)
 	return test_draw
-}
-
-const handleNumberReq = () => {
-	/* executed upon request from renderer
-	increases test_number and returns it */
-	test_number = add(test_number, 1)
-	return test_number
 }
 
 
