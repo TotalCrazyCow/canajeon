@@ -1,12 +1,13 @@
 #include <fstream>
 #include <string>
+#include <cmath>
 #include <napi.h>
 #include "bmp.hpp"
 
 using namespace std;
 
 // add function wrapper
-Napi::Number addWrapped(const Napi::CallbackInfo &info);
+Napi::Number drawRoutineWrapped(const Napi::CallbackInfo &info);
 
 // Export API
 Napi::Object Init(Napi::Env env, Napi::Object exports);

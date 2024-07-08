@@ -1,21 +1,5 @@
 #include "grid.hpp"
 
-Napi::Number addWrapped(const Napi::CallbackInfo &info)
-{
-	Napi::Env env = info.Env();
-
-	Napi::Number returnValue = Napi::Number::New(env, drawRoutine());
-
-	return returnValue;
-};
-
-Napi::Object Init(Napi::Env env, Napi::Object exports)
-{
-	// export Napi function
-	exports.Set("drawRoutine", Napi::Function::New(env, drawRoutine()));
-	return exports;
-};
-
 std::string drawGrid(EasyBMP::Image& img, Grid& domain)
 {
 	domain.getExtrema();
@@ -52,3 +36,19 @@ int main()
 
 	return 0;
 }
+
+Napi::Number drawRoutineWrapped(const Napi::CallbackInfo &info)
+{
+	Napi::Env env = info.Env();
+
+	Napi::Number returnValue = Napi::Number::New(env, drawRoutine());
+
+	return returnValue;
+};
+
+Napi::Object Init(Napi::Env env, Napi::Object exports)
+{
+	// export Napi function
+	exports.Set("drawRoutine", Napi::Function::New(env, drawRoutineWrapped));
+	return exports;
+};
