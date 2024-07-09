@@ -52,7 +52,7 @@ Grid::Grid(/* args */)
 		{
 			for (int y = 0; y < GRID_SIZE; y++)
 			{
-				pos[t][x][y] = sin(scale*(x+10*t)) + cos(scale*(y+10*t));
+				pos[t][x][y] = sin(scale*scale*(x*x + y*y) - t);
 			}
 		}
 	}
