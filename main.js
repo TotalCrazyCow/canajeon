@@ -4,10 +4,10 @@ const path = require('node:path')
 const { drawRoutine } = require("./build/Release/addon.node");
 
 
-// the next value is updated upon request from renderer
-// and passed to renderer
+// the next value is updated upon request from renderer and passed to renderer
 var test_number = 0
 var step = 0
+const finished = true
 
 
 const createWindow = () => {
@@ -23,9 +23,12 @@ const createWindow = () => {
 }
 
 const handleDrawReq = () => {
+	
+	if (drawRoutine(step++) === finished) {
+		step = 0	
+	}
 
-	test_draw = drawRoutine(step++)
-	return test_draw
+	return step;
 }
 
 const handleNumberReq = () => {

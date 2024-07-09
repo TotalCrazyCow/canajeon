@@ -17,7 +17,7 @@ const fetchAndInject = async () => {
 	location.reload();
 	// inject
 	const information = document.getElementById('info');
-	information.innerText = `Message from main: ${newData}`
+	//information.innerText = `Message from main: ${newData}`
 }
 
 const doDaLoopin = async () => {
@@ -26,8 +26,12 @@ const doDaLoopin = async () => {
 	as the sleep function returns a promise and needs an
 	await (otherwise it behaves as if it were async */
 
-	for (let cntr = 0; cntr < 100; ++cntr) {
-		await sleep(1000).then(() => { fetchAndInject() });
+	for (let cntr = 0; cntr < 10000; ++cntr) {
+		await sleep(100).then(() => { 
+			fetchAndInject() 
+			console.log(cntr)
+		});
+		
 	}
 
 }

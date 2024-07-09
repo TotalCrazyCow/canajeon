@@ -7,7 +7,7 @@
 using namespace std;
 
 // add function wrapper
-Napi::Number drawRoutineWrapped(const Napi::CallbackInfo &info);
+Napi::Boolean drawRoutineWrapped(const Napi::CallbackInfo &info);
 
 // Export API
 Napi::Object Init(Napi::Env env, Napi::Object exports);
@@ -15,7 +15,7 @@ NODE_API_MODULE(addon, Init)
 
 const int DIMENSION = 2;
 const int GRID_SIZE = 501;
-const int STEP_NUMBER = 10;
+const int STEP_NUMBER = 100;
 
 namespace Colors {
 

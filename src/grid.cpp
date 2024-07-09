@@ -1,6 +1,6 @@
 #include "grid.hpp"
 
-std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
+void drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 {
 	domain.getExtrema();
 
@@ -21,28 +21,22 @@ std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 	// std::string encodedImage = base64_encode(bmpBuffer, totalSize);
 
 	// return encodedImage;
-	return "drawGrid() finito senza errori!\n";
+	//return "drawGrid() finito senza errori!\n";
 };
 
-int drawRoutine(int step) {
+const bool drawRoutine(int step) {
 
-	std::string test = drawGrid(img, domain, step);
-	return step;
+	drawGrid(img, domain, step);
+	if (step == STEP_NUMBER-1) return true;
+	return false;
 };
 
-int main()
-{
-	drawRoutine(1);
-
-	return 0;
-}
-
-Napi::Number drawRoutineWrapped(const Napi::CallbackInfo &info)
+Napi::Boolean drawRoutineWrapped(const Napi::CallbackInfo &info)
 {
 	Napi::Env env = info.Env();
 	Napi::Number step = info[0].As<Napi::Number>();
 
-	Napi::Number returnValue = Napi::Number::New(env, drawRoutine(step.Int32Value()));
+	Napi::Boolean returnValue = Napi::Boolean::New(env, drawRoutine(step.Int32Value()));
 
 	return returnValue;
 };
