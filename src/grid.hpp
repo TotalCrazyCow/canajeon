@@ -40,24 +40,22 @@ public:
 
 	double maxValue;
 	double minValue;
-	double rescale;
 };
 
 Grid::Grid(/* args */)
 {
+	double scale = 2 * M_PI / GRID_SIZE ;
 	// creation of example function to plot
 	for (int t = 0; t < STEP_NUMBER; t++)
 	{
-		for (int i = 0; i < GRID_SIZE; i++)
+		for (int x = 0; x < GRID_SIZE; x++)
 		{
-			for (int j = 0; j < GRID_SIZE; j++)
+			for (int y = 0; y < GRID_SIZE; y++)
 			{
-				pos[t][i][j] = 100 * t;
+				pos[t][x][y] = sin(scale*(x+10*t)) + cos(scale*(y+10*t));
 			}
 		}
 	}
-
-	rescale = 1; // default value
 }
 
 Grid::~Grid()
@@ -86,8 +84,6 @@ void Grid::getExtrema() {
 			}
 		}
 	}
-
-	rescale = 255/std::abs(maxValue - minValue);
 }
 
 std::string base64_encode(char const *buf, unsigned int bufLen) {
@@ -134,14 +130,18 @@ std::string base64_encode(char const *buf, unsigned int bufLen) {
 	return ret;
 };
 
+int colorOfValue(const Grid& grid, int step, int x, int y) {
+
+	return std::ceil(255*(domain.pos[step][x][y] - domain.minValue)/(domain.maxValue - domain.minValue));
+}
+
 void colorBitmap(EasyBMP::Image &img, int timeStep, Grid& domain)
 {	
 	for (int i = 0; i < GRID_SIZE; i++)
 	{
 		for (int j = 0; j < GRID_SIZE; j++)
 		{
-			int blueQuantity = std::ceil(domain.rescale * domain.pos[timeStep][i][j]);
-			EasyBMP::RGBColor blueVal(0, 0, blueQuantity);
+			EasyBMP::RGBColor blueVal(0, 0, colorOfValue(domain, timeStep, i, j));
 			img.SetPixel(i, j, blueVal, 0);
 		}
 	}
