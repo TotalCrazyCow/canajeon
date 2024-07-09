@@ -40,6 +40,7 @@ public:
 
 	double maxValue;
 	double minValue;
+	std::string encodedImage;
 };
 
 Grid::Grid(/* args */)
@@ -56,6 +57,7 @@ Grid::Grid(/* args */)
 			}
 		}
 	}
+	encodedImage = "null";
 }
 
 Grid::~Grid()

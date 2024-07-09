@@ -18,7 +18,7 @@ void drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 	// int bmpBufferElements = totalSize / sizeof(char);
 	// char bmpBuffer[bmpBufferElements];
 	// std::memcpy(bmpBuffer, &domain, totalSize);
-	// std::string encodedImage = base64_encode(bmpBuffer, totalSize);
+	// domain.encodedImage = base64_encode(bmpBuffer, totalSize);
 
 	// return encodedImage;
 	//return "drawGrid() finito senza errori!\n";
@@ -26,7 +26,7 @@ void drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 
 const bool drawRoutine(int step) {
 
-	drawGrid(img, domain, step);
+	drawGrid(img, domain, step%STEP_NUMBER);
 	if (step == STEP_NUMBER-1) return true;
 	return false;
 };
