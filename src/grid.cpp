@@ -1,6 +1,6 @@
 #include "grid.hpp"
 
-void drawGrid(EasyBMP::Image& img, Grid& domain, int t)
+std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 {
 	std::string encodedImage = "";
 
