@@ -7,7 +7,7 @@
 using namespace std;
 
 // add function wrapper
-Napi::Number drawRoutineWrapped(const Napi::CallbackInfo &info);
+Napi::String drawRoutineWrapped(const Napi::CallbackInfo &info);
 
 // Export API
 Napi::Object Init(Napi::Env env, Napi::Object exports);

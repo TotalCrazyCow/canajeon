@@ -14,10 +14,9 @@ const fetchAndInject = async () => {
 
 	// fetch from main
 	const newData = await window.mainAPI.fetchNext();
-	location.reload();
 	// inject
-	const information = document.getElementById('info');
-	information.innerText = `Message from main: ${newData}`
+	const imageFrame = document.getElementById('inj_tgt');
+	imageFrame.src = "data:image/bmp;charset=utf-8;base64, ".concat(newData)
 }
 
 const doDaLoopin = async () => {

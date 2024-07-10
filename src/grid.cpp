@@ -2,6 +2,8 @@
 
 std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 {
+	std::string encodedImage = "";
+
 	domain.getExtrema();
 
 	// bitmap file creation
@@ -10,7 +12,7 @@ std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 		colorBitmap(img, t, domain);
 		std::string fileName = "test" + std::to_string(t) + ".bmp";
 		std::string fileName2 = "test.bmp";
-		img.Write(fileName2);
+		img.AsBase64(encodedImage);
 		//std::remove("test.bmp");
 	//}
 
@@ -18,16 +20,14 @@ std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 	// int bmpBufferElements = totalSize / sizeof(char);
 	// char bmpBuffer[bmpBufferElements];
 	// std::memcpy(bmpBuffer, &domain, totalSize);
-	// std::string encodedImage = base64_encode(bmpBuffer, totalSize);
 
-	// return encodedImage;
-	return "drawGrid() finito senza errori!\n";
+	return encodedImage;
 };
 
-int drawRoutine(int step) {
+std::string drawRoutine(int step) {
 
-	std::string test = drawGrid(img, domain, step);
-	return step;
+	std::string encoded = drawGrid(img, domain, step);
+	return encoded;
 };
 
 int main()
@@ -37,12 +37,12 @@ int main()
 	return 0;
 }
 
-Napi::Number drawRoutineWrapped(const Napi::CallbackInfo &info)
+Napi::String drawRoutineWrapped(const Napi::CallbackInfo &info)
 {
 	Napi::Env env = info.Env();
 	Napi::Number step = info[0].As<Napi::Number>();
 
-	Napi::Number returnValue = Napi::Number::New(env, drawRoutine(step.Int32Value()));
+	Napi::String returnValue = Napi::String::New(env, drawRoutine(step.Int32Value()));
 
 	return returnValue;
 };
