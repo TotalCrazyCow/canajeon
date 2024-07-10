@@ -8,7 +8,7 @@ const { drawRoutine } = require("./build/Release/addon.node");
 // and passed to renderer
 var test_number = 0
 var step = 0
-
+var frame = ""
 
 const createWindow = () => {
 	/* generates window with desired settings */
@@ -25,8 +25,9 @@ const createWindow = () => {
 
 const handleDrawReq = () => {
 
-	test_draw = drawRoutine(step++)
-	return test_draw
+	frame = drawRoutine(step++)
+
+	return frame
 }
 
 
