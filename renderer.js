@@ -1,3 +1,32 @@
+/*let canvas = document.getElementById("target_canvas");
+canvas.height = innerHeight;
+canvas.width = innerWidth;
+
+let ctx = canvas.getContext("2d");
+
+imgToRender = new Image();
+imgToRender.onload = () => {
+	ctx.drawImage(img, 0, 0);
+};
+imgToRender.src = "data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw==";
+*/
+
+
+const ctx = document.getElementById("targetcanvas").getContext("2d");
+const img = new Image();
+img.onload = () => {
+    ctx.drawImage(img, 0, 0);
+    ctx.beginPath();
+    ctx.moveTo(30, 96);
+    ctx.lineTo(70, 66);
+    ctx.lineTo(103, 76);
+    ctx.lineTo(170, 15);
+    ctx.stroke();
+};
+img.src = "backdrop.png";
+
+
+
 function sleep(ms) {
 	
 	/* use: sleep(xxx).then(do_something()) 
@@ -15,8 +44,8 @@ const fetchAndInject = async () => {
 	// fetch from main
 	const newData = await window.mainAPI.fetchNext();
 	// inject
-	const imageFrame = document.getElementById('inj_tgt');
-	imageFrame.src = "data:image/bmp;charset=utf-8;base64, ".concat(newData)
+	imgToRender.src = "data:image/bmp;charset=utf-8;base64, ".concat(newData);
+	//ctx.drawImage(imgToRender,0,0);
 }
 
 const doDaLoopin = async () => {
@@ -36,4 +65,4 @@ const doDaLoopin = async () => {
 }
 
 // script
-doDaLoopin()
+//doDaLoopin()
