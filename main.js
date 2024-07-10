@@ -9,7 +9,7 @@ var frame = ""
 const createWindow = () => {
 	/* generates window with desired settings */
 	const win = new BrowserWindow({
-		width: 800,
+		width: 600,
 		height: 600,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js')

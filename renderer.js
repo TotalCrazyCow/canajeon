@@ -16,7 +16,7 @@ const fetchAndInject = async () => {
 	const newData = await window.mainAPI.fetchNext();
 	// inject
 	var canvas = document.getElementById("target_canvas");
-	canvas.width = 800;
+	canvas.width = 600;
 	canvas.height = 600;
 	var ctx = canvas.getContext("2d");
 	var image = new Image();

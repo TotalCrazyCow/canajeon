@@ -14,8 +14,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports);
 NODE_API_MODULE(addon, Init)
 
 const int DIMENSION = 2;
-const int GRID_SIZE = 500;
-const int STEP_BRO = 1000;
+const int GRID_SIZE = 600;
+const int STEP_BRO = 100;
 
 namespace Colors {
 
@@ -94,8 +94,9 @@ void colorBitmap(EasyBMP::Image &img, int timeStep, Grid& domain)
 	{
 		for (int j = 0; j < GRID_SIZE; j++)
 		{
-			EasyBMP::RGBColor blueVal(0, 0, colorOfValue(domain, timeStep, i, j));
-			img.SetPixel(i, j, blueVal, 0);
+			int val = colorOfValue(domain, timeStep, i, j);
+			EasyBMP::RGBColor pixelColor(60, 60, val);
+			img.SetPixel(i, j, pixelColor, 0);
 		}
 	}
 };

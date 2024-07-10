@@ -18,13 +18,6 @@ std::string drawRoutine(int step) {
 	return encoded;
 };
 
-int main()
-{
-	drawRoutine(1);
-
-	return 0;
-}
-
 Napi::String drawRoutineWrapped(const Napi::CallbackInfo &info)
 {
 	Napi::Env env = info.Env();
