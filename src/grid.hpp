@@ -14,8 +14,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports);
 NODE_API_MODULE(addon, Init)
 
 const int DIMENSION = 2;
-const int GRID_SIZE = 501;
-const int STEP_BRO = 100;
+const int GRID_SIZE = 500;
+const int STEP_BRO = 1000;
 
 namespace Colors {
 

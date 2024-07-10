@@ -1,11 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron/main')
 const path = require('node:path')
-//const { add } = require("./build/Release/addon.node");
 const { drawRoutine } = require("./build/Release/addon.node");
 
-
-// the next value is updated upon request from renderer
-// and passed to renderer
+// the next value is updated upon request from renderer and passed to renderer
 var step = 0
 var frame = ""
 
