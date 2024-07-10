@@ -6,27 +6,15 @@ std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 
 	domain.getExtrema();
 
-	// bitmap file creation
-	//for (int t = 0; t < STEP_NUMBER; t++)
-	//{
-		colorBitmap(img, t, domain);
-		std::string fileName = "test" + std::to_string(t) + ".bmp";
-		std::string fileName2 = "test.bmp";
-		img.AsBase64(encodedImage);
-		//std::remove("test.bmp");
-	//}
-
-	// size_t totalSize = sizeof(domain);
-	// int bmpBufferElements = totalSize / sizeof(char);
-	// char bmpBuffer[bmpBufferElements];
-	// std::memcpy(bmpBuffer, &domain, totalSize);
+	colorBitmap(img, t, domain);
+	img.AsBase64(encodedImage);
 
 	return encodedImage;
 };
 
 std::string drawRoutine(int step) {
 
-	std::string encoded = drawGrid(img, domain, step);
+	std::string encoded = drawGrid(img, domain, step % STEP_BRO);
 	return encoded;
 };
 

@@ -6,7 +6,6 @@ const { drawRoutine } = require("./build/Release/addon.node");
 
 // the next value is updated upon request from renderer
 // and passed to renderer
-var test_number = 0
 var step = 0
 var frame = ""
 
