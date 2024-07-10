@@ -10,6 +10,7 @@ License: MIT
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "base64.hpp"
 
 namespace EasyBMP 
 {
@@ -66,7 +67,7 @@ namespace EasyBMP
         void SetFileName(const string& _outFileName);
         void Write(const string& _outFileName);
         void Write();
-        void WriteToString(stringstream& outBuf);
+        void AsBase64(string& encodedBuf);
         inline int64_t w() const { return width; }
         inline int64_t h() const { return height; }
         inline bool isValidCoordinate(int64_t x, int64_t y) const {
@@ -411,8 +412,10 @@ namespace EasyBMP
         outFile.close();
     }
 
-    void Image::WriteToString(stringstream& outBuf)
+    void Image::AsBase64(string& encodedBuf)
     {
+
+        stringstream rawBuf;
 
         unsigned int headers[13];
         int paddedSize, extraBytes;
@@ -453,37 +456,37 @@ namespace EasyBMP
         // When printing ints and shorts, we write out 1 character at a time to avoid endian issues.
         //
 
-        outBuf << 'B' << 'M';
+        rawBuf << 'B' << 'M';
 
         uint8_t tempInt = 0;
-        char* tempIntAsChar = reinterpret_cast<char*>(&tempInt);
+        char (*tempIntAsChar) = (char *)static_cast<void*>(&tempInt);
 
         for (int i = 0; i <= 5; ++i) {
             tempInt = (uint8_t)((headers[i] & 0x000000ff));
-            outBuf << (*tempIntAsChar);
+            rawBuf << (*tempIntAsChar);
             tempInt = (uint8_t)((headers[i] & 0x0000ff00) >> 8);
-            outBuf << (*tempIntAsChar);
+            rawBuf << (*tempIntAsChar);
             tempInt = (uint8_t)((headers[i] & 0x00ff0000) >> 16);
-            outBuf << (*tempIntAsChar);
+            rawBuf << (*tempIntAsChar);
             tempInt = (uint8_t)((headers[i] & (uint32_t)0xff000000) >> 24);
-            outBuf << (*tempIntAsChar);
+            rawBuf << (*tempIntAsChar);
         }
 
         // These next 4 characters are for the biPlanes and biBitCount fields.
-        tempInt = 1; outBuf << (*tempIntAsChar);
-        tempInt = 0; outBuf << (*tempIntAsChar);
-        tempInt = 24; outBuf << (*tempIntAsChar);
-        tempInt = 0; outBuf << (*tempIntAsChar);
+        tempInt = 1; rawBuf << (*tempIntAsChar);
+        tempInt = 0; rawBuf << (*tempIntAsChar);
+        tempInt = 24; rawBuf << (*tempIntAsChar);
+        tempInt = 0; rawBuf << (*tempIntAsChar);
 
         for (int i = 7; i <= 12; ++i) { 
             tempInt = (uint8_t)((headers[i] & 0x000000ff));
-            outBuf << (*tempIntAsChar);
+            rawBuf << (*tempIntAsChar);
             tempInt = (uint8_t)((headers[i] & 0x0000ff00) >> 8);
-            outBuf << (*tempIntAsChar);
+            rawBuf << (*tempIntAsChar);
             tempInt = (uint8_t)((headers[i] & 0x00ff0000) >> 16);
-            outBuf << (*tempIntAsChar);
+            rawBuf << (*tempIntAsChar);
             tempInt = (uint8_t)((headers[i] & (uint32_t)0xff000000) >> 24);
-            outBuf << (*tempIntAsChar);
+            rawBuf << (*tempIntAsChar);
         }
 
         //
@@ -494,17 +497,19 @@ namespace EasyBMP
         for (int64_t y = height - 1; y >= 0; --y) {
             for (int64_t x = 0; x < width; ++x) {
                 // Also, it's written in (b,g,r) format...
-                tempInt = buffer[y][x].b; outBuf << (*tempIntAsChar);
-                tempInt = buffer[y][x].g; outBuf << (*tempIntAsChar);
-                tempInt = buffer[y][x].r; outBuf << (*tempIntAsChar);
+                tempInt = buffer[y][x].b; rawBuf << (*tempIntAsChar);
+                tempInt = buffer[y][x].g; rawBuf << (*tempIntAsChar);
+                tempInt = buffer[y][x].r; rawBuf << (*tempIntAsChar);
             }
             // See above - BMP lines must be of lengths divisible by 4.
             if (extraBytes) {
                 for (int i = 1; i <= extraBytes; ++i) {
-                    tempInt = 0; outBuf << (*tempIntAsChar);
+                    tempInt = 0; rawBuf << (*tempIntAsChar);
                 }
             }
         }
+
+        encodedBuf = base64::to_base64(rawBuf.str());;
     }
 
     // Reverse of Write()
