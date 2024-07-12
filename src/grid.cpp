@@ -1,20 +1,20 @@
 #include "grid.hpp"
 
-std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
+std::string drawGrid()
 {
-	std::string encodedImage = "";
+//	std::string encodedImage = "";
 
-	domain.getExtrema();
+	sol.step();
 
-	colorBitmap(img, t, domain);
-	img.AsBase64(encodedImage);
+	colorBitmap(img, sol);
+	img.AsBase64(sol.encodedImage);
 
-	return encodedImage;
+	return sol.encodedImage;
 };
 
 std::string drawRoutine(int step) {
 
-	std::string encoded = drawGrid(img, domain, step % STEP_BRO);
+	std::string encoded = drawGrid();
 	return encoded;
 };
 
