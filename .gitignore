@@ -4,6 +4,7 @@ build/
 package-lock.json
 *.bmp
 *.out
+*.dSYM
 
 # Logs
 logs

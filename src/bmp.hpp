@@ -10,6 +10,7 @@ License: MIT
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "base64.hpp"
 
 namespace EasyBMP 
 {
@@ -66,6 +67,7 @@ namespace EasyBMP
         void SetFileName(const string& _outFileName);
         void Write(const string& _outFileName);
         void Write();
+        void AsBase64(string& encodedBuf);
         inline int64_t w() const { return width; }
         inline int64_t h() const { return height; }
         inline bool isValidCoordinate(int64_t x, int64_t y) const {
@@ -408,6 +410,106 @@ namespace EasyBMP
         }
         
         outFile.close();
+    }
+
+    void Image::AsBase64(string& encodedBuf)
+    {
+
+        stringstream rawBuf;
+
+        unsigned int headers[13];
+        int paddedSize, extraBytes;
+        
+        extraBytes = 4 - ((width * 3) % 4);         // How many bytes of padding to add to each
+                                                    // horizontal line - the size of which must
+                                                    // be a multiple of 4 bytes.
+
+        if (extraBytes == 4) {
+            extraBytes = 0;
+        }
+
+        paddedSize = ((width * 3) + extraBytes) * height;
+
+        // Headers...
+        // Note that the "BM" identifier in bytes 0 and 1 is NOT included in these "headers".
+                             
+        headers[0]  = paddedSize + 54;      // bfSize (whole file size)
+        headers[1]  = 0;                    // bfReserved (both)
+        headers[2]  = 54;                   // bfOffbits
+        headers[3]  = 40;                   // biSize
+        headers[4]  = width;  // biWidth
+        headers[5]  = height; // biHeight
+
+        // Would have biPlanes and biBitCount in position 6, but they're shorts.
+        // It's easier to write them out separately (see below) than pretend
+        // they're a single int, especially with endian issues...
+
+        headers[7]  = 0;                    // biCompression
+        headers[8]  = paddedSize;           // biSizeImage
+        headers[9]  = 0;                    // biXPelsPerMeter
+        headers[10] = 0;                    // biYPelsPerMeter
+        headers[11] = 0;                    // biClrUsed
+        headers[12] = 0;                    // biClrImportant
+
+        //
+        // Headers begin...
+        // When printing ints and shorts, we write out 1 character at a time to avoid endian issues.
+        //
+
+        rawBuf << 'B' << 'M';
+
+        uint8_t tempInt = 0;
+        char (*tempIntAsChar) = (char *)static_cast<void*>(&tempInt);
+
+        for (int i = 0; i <= 5; ++i) {
+            tempInt = (uint8_t)((headers[i] & 0x000000ff));
+            rawBuf << (*tempIntAsChar);
+            tempInt = (uint8_t)((headers[i] & 0x0000ff00) >> 8);
+            rawBuf << (*tempIntAsChar);
+            tempInt = (uint8_t)((headers[i] & 0x00ff0000) >> 16);
+            rawBuf << (*tempIntAsChar);
+            tempInt = (uint8_t)((headers[i] & (uint32_t)0xff000000) >> 24);
+            rawBuf << (*tempIntAsChar);
+        }
+
+        // These next 4 characters are for the biPlanes and biBitCount fields.
+        tempInt = 1; rawBuf << (*tempIntAsChar);
+        tempInt = 0; rawBuf << (*tempIntAsChar);
+        tempInt = 24; rawBuf << (*tempIntAsChar);
+        tempInt = 0; rawBuf << (*tempIntAsChar);
+
+        for (int i = 7; i <= 12; ++i) { 
+            tempInt = (uint8_t)((headers[i] & 0x000000ff));
+            rawBuf << (*tempIntAsChar);
+            tempInt = (uint8_t)((headers[i] & 0x0000ff00) >> 8);
+            rawBuf << (*tempIntAsChar);
+            tempInt = (uint8_t)((headers[i] & 0x00ff0000) >> 16);
+            rawBuf << (*tempIntAsChar);
+            tempInt = (uint8_t)((headers[i] & (uint32_t)0xff000000) >> 24);
+            rawBuf << (*tempIntAsChar);
+        }
+
+        //
+        // Headers done, now write the data...
+        //
+
+        // BMP image format is written from bottom to top...
+        for (int64_t y = height - 1; y >= 0; --y) {
+            for (int64_t x = 0; x < width; ++x) {
+                // Also, it's written in (b,g,r) format...
+                tempInt = buffer[y][x].b; rawBuf << (*tempIntAsChar);
+                tempInt = buffer[y][x].g; rawBuf << (*tempIntAsChar);
+                tempInt = buffer[y][x].r; rawBuf << (*tempIntAsChar);
+            }
+            // See above - BMP lines must be of lengths divisible by 4.
+            if (extraBytes) {
+                for (int i = 1; i <= extraBytes; ++i) {
+                    tempInt = 0; rawBuf << (*tempIntAsChar);
+                }
+            }
+        }
+
+        encodedBuf = base64::to_base64(rawBuf.str());;
     }
 
     // Reverse of Write()

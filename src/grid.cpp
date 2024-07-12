@@ -1,105 +1,36 @@
-// #include "example.hpp"
-#include <fstream>
-#include <string>
-#include "bmp.hpp"
+#include "grid.hpp"
 
-using namespace std;
-
-const int DIMENSION = 2;
-const int GRID_SIZE = 1001;
-
-static const std::string base64_chars =
-             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-             "abcdefghijklmnopqrstuvwxyz"
-             "0123456789+/";
-
-struct Grid
+std::string drawGrid(EasyBMP::Image& img, Grid& domain, int t)
 {
-  double pos[GRID_SIZE][GRID_SIZE];
+	std::string encodedImage = "";
+
+	domain.getExtrema();
+
+	colorBitmap(img, t, domain);
+	img.AsBase64(encodedImage);
+
+	return encodedImage;
 };
 
-std::string base64_encode(char const* buf, unsigned int bufLen) {
-  std::string ret;
-  int i = 0;
-  int j = 0;
-  char char_array_3[3];
-  char char_array_4[4];
+std::string drawRoutine(int step) {
 
-  while (bufLen--) {
-    char_array_3[i++] = *(buf++);
-    if (i == 3) {
-      char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
-      char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
-      char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
-      char_array_4[3] = char_array_3[2] & 0x3f;
-
-      for(i = 0; (i <4) ; i++)
-        ret += base64_chars[char_array_4[i]];
-      i = 0;
-    }
-  }
-
-  if (i)
-  {
-    for(j = i; j < 3; j++)
-      char_array_3[j] = '\0';
-
-    char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
-    char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
-    char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
-    char_array_4[3] = char_array_3[2] & 0x3f;
-
-    for (j = 0; (j < i + 1); j++)
-      ret += base64_chars[char_array_4[j]];
-
-    while((i++ < 3))
-      ret += '=';
-  }
-
-  return ret;
+	std::string encoded = drawGrid(img, domain, step % STEP_BRO);
+	return encoded;
 };
 
-std::string drawGrid()
+Napi::String drawRoutineWrapped(const Napi::CallbackInfo &info)
 {
-  Grid domain = Grid();
-  double x_min = 0;
-  double x_max = 1;
-  double y_min = 0;
-  double y_max = 1;
+	Napi::Env env = info.Env();
+	Napi::Number step = info[0].As<Napi::Number>();
 
-  double step = (x_max - x_min) / (GRID_SIZE - 1);
+	Napi::String returnValue = Napi::String::New(env, drawRoutine(step.Int32Value()));
 
-  EasyBMP::RGBColor black(0, 0, 0);
-  EasyBMP::RGBColor white(255,255,255); 
-  EasyBMP::Image img(GRID_SIZE, GRID_SIZE, "test.bmp", white);
-
-  for (int i = 0; i < GRID_SIZE; i++)
-    for (int j = 0; j < GRID_SIZE; j++)
-    {
-      domain.pos[i][j] = x_min + i * j * step;
-      EasyBMP::RGBColor blue(0, 0, std::ceil(domain.pos[i][j]));  
-      img.SetPixel(i, j, blue, 0);
-    }
-
-  img.Write("test.bmp");
-
-  size_t totalSize = sizeof(domain);
-  int bmpBufferElements = totalSize / sizeof(char);
-  char bmpBuffer[bmpBufferElements];
-
-  std::cout << "totalsize = " << totalSize << std::endl;
-  std::cout << "sizeof(char) = " << sizeof(char) << std::endl;
-
-  std::memcpy(bmpBuffer, &domain, totalSize);
-  std::string encodedImage = base64_encode(bmpBuffer, totalSize);
-
-  return encodedImage;
+	return returnValue;
 };
 
-
-int main() {
-
-  std::cout << drawGrid();
-
-  return 0;
-}
+Napi::Object Init(Napi::Env env, Napi::Object exports)
+{
+	// export Napi function
+	exports.Set("drawRoutine", Napi::Function::New(env, drawRoutineWrapped));
+	return exports;
+};

@@ -1,39 +1,25 @@
-/* define functions */
+var FRAMERATE = 30 // frame per second
 
-function sleep(ms) {
-  /* use: sleep(xxx).then(do_something()) 
-  to execute a function do_something after xxx seconds.
-  IMPORTANT: the whole block behaves asyncronously,
-  that is whatever statement comes after sleep(..).then(...)
-  is executed immediately! 
-  > If you want this function to actually halt execution,
-    you need to call this with await in a async env */
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+let ctx = target_canvas.getContext("2d");
+target_canvas.width = 600;
+target_canvas.height = 600;
 
+var image = new Image();
 
+// get fresh data before animation begins
 const fetchAndInject = async () => {
-  // fetch from main
-  const newData = await window.mainAPI.fetchNext();
-  // inject
-  const information = document.getElementById('info');
-  information.innerText = `Message from main: ${newData}`
+
+	const newData = await window.mainAPI.fetchNext();
+	image.src = "data:image/bmp;charset=utf-8;base64, ".concat(newData);
 }
 
+function frame() {
 
-const doDaLoopin = async() => {
-  /* time loop; this MUST be done in a async function
-  as the sleep function returns a promise and needs an
-  await (otherwise it behaves as if it were async */
+	fetchAndInject();
+	//wipe off canvas before each redraw
+	ctx.clearRect(0, 0, target_canvas.width, target_canvas.height);
 
-  for (let cntr = 0; cntr < 100; ++cntr) {
-    await sleep(1000).then(() => {fetchAndInject()});
-  }
-
+	ctx.drawImage(image, 0, 0);
 }
 
-
-
-/* script */
-
-doDaLoopin()
+setInterval(frame, 1000 / FRAMERATE) 
