@@ -1,20 +1,9 @@
 #include <fstream>
 #include <string>
 #include <cmath>
-#include <napi.h>
 #include "bmp.hpp"
 
 using namespace std;
-
-// add function wrapper
-Napi::String drawRoutineWrapped(const Napi::CallbackInfo &info);
-
-// Export API
-Napi::Object Init(Napi::Env env, Napi::Object exports);
-NODE_API_MODULE(addon, Init)
-
-
-/////////////////////////
 
 
 const int DIMENSION = 2;
@@ -44,7 +33,14 @@ public:
 	Grid(/* args */);
 	~Grid();
 
-	std::string step();
+	std::string StepAndDraw();
+
+private:
+	void granularStep(int ix, int iy);
+	void numericalStep();
+	int colorOfValue(int x, int y);
+	void colorBitmap();
+	void step();
 
 	// numerical stuff
 	culationMatrix solInMem;
@@ -54,16 +50,12 @@ public:
 	void getExtrema(void);
 	double maxValue;
 	double minValue;
-	
-	// output di tutto
-	std::string encodedImage;
 
-private:
-	void granularStep(int ix, int iy);
-	void numericalStep();
+	EasyBMP::Image img;
+	std::string encodedImage;
 };
 
-Grid::Grid(/* args */)
+Grid::Grid(/* args */): img(GRID_SIZE, GRID_SIZE, "test.bmp", Colors::white)
 {
 
 	solInMem = {};
@@ -101,15 +93,11 @@ void Grid::numericalStep() {
 	unp = temp;
 };
 
-std::string Grid::step() {
+void Grid::step() {
 	numericalStep();
 	getExtrema();
 };
 
-Grid sol = Grid();
-EasyBMP::Image img(GRID_SIZE, GRID_SIZE, "test.bmp", Colors::white);
-
-/// @brief calculates maximum and minimum values on grid matrix, and calculates rescale factor for coloring
 void Grid::getExtrema() {
 	
 	// initialization of values
@@ -126,20 +114,30 @@ void Grid::getExtrema() {
 	}
 }
 
-int colorOfValue(const Grid& grid, int x, int y) {
-
-	return std::ceil(255*(sol.un->mesh[x][y] - sol.minValue)/(sol.maxValue - sol.minValue));
+int Grid::colorOfValue(int x, int y) {
+	return std::ceil(255*(un->mesh[x][y] - minValue)/(maxValue - minValue));
 }
 
-void colorBitmap(EasyBMP::Image &img, Grid& sol)
+void Grid::colorBitmap()
 {	
 	for (int i = 0; i < GRID_SIZE; i++)
 	{
 		for (int j = 0; j < GRID_SIZE; j++)
 		{
-			int val = colorOfValue(sol, i, j);
+			int val = colorOfValue(i, j);
 			EasyBMP::RGBColor pixelColor(60, 60, val);
 			img.SetPixel(i, j, pixelColor, 0);
 		}
 	}
+};
+
+std::string Grid::StepAndDraw()
+{
+//	std::string encodedImage = "";
+
+	step();
+	colorBitmap();
+	img.AsBase64(encodedImage);
+
+	return encodedImage;
 };
