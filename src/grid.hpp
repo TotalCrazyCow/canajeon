@@ -34,6 +34,7 @@ public:
 	~Grid();
 
 	std::string StepAndDraw();
+	void StepAndWrite(std::string filename);
 
 private:
 	void granularStep(int ix, int iy);
@@ -133,11 +134,17 @@ void Grid::colorBitmap()
 
 std::string Grid::StepAndDraw()
 {
-//	std::string encodedImage = "";
 
 	step();
 	colorBitmap();
 	img.AsBase64(encodedImage);
 
 	return encodedImage;
+};
+
+void Grid::StepAndWrite(std::string filename)
+{
+	step();
+	colorBitmap();
+	img.Write(filename);
 };
