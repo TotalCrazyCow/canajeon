@@ -21,9 +21,7 @@ const createWindow = () => {
 
 
 const handleDrawReq = () => {
-	a = sol.drawNext()
-	console.log(a)
-	return a
+	return sol.drawNext()
 }
 
 

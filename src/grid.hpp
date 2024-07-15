@@ -7,10 +7,12 @@ using namespace std;
 
 
 const int DIMENSION = 2;
-const int GRID_SIZE = 600;
-const int STEP_BRO = 100;
-const double DT = 1/STEP_BRO;
-const double SOUND_SPEED = 1;
+const int GRID_SIZE = 50;
+const int STEP_BRO = 60;
+const double LX = 1;
+const double DT = 1/double(STEP_BRO);
+const double DX = LX/(GRID_SIZE-1);
+const double SOUND_SPEED = 0.1;
 
 
 namespace Colors {
@@ -68,7 +70,6 @@ Grid::Grid(/* args */): img(GRID_SIZE, GRID_SIZE, "test.bmp", Colors::white)
 	// some initial condition
 	un->mesh[GRID_SIZE/2][GRID_SIZE/2] = 1;
 
-	double scale = 2 * M_PI / GRID_SIZE ;
 	encodedImage = "null";
 }
 
@@ -79,7 +80,9 @@ Grid::~Grid()
 
 
 void Grid::granularStep(int ix, int iy) {
-	unp->mesh[ix][iy] = 2*un->mesh[ix][iy] - unm->mesh[ix][iy] - SOUND_SPEED*SOUND_SPEED*DT*DT*(un->mesh[ix][iy+1] - 2*un->mesh[ix][iy] + un->mesh[ix][iy-1] + un->mesh[ix+1][iy] - 2*un->mesh[ix][iy] + un->mesh[ix-1][iy]);
+	double xDoubleDer = (un->mesh[ix+1][iy] - 2*un->mesh[ix][iy] + un->mesh[ix-1][iy])/DX/DX;
+	double yDoubleDer = (un->mesh[ix][iy+1] - 2*un->mesh[ix][iy] + un->mesh[ix][iy-1])/DX/DX;
+	unp->mesh[ix][iy] = 2*un->mesh[ix][iy] - unm->mesh[ix][iy] + SOUND_SPEED*SOUND_SPEED*DT*DT*(xDoubleDer + yDoubleDer);
 };
 
 void Grid::numericalStep() {
