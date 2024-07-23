@@ -1,4 +1,4 @@
 #!/bin/zsh
 
-sudo npm install
+npm install
 npm start
