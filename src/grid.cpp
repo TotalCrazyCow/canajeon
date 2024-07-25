@@ -14,7 +14,9 @@ Grid::Grid(/* args */) : img(GRID_SIZE, GRID_SIZE, "test.bmp", Colors::white)
 	unm = &solInMem.instant[0];
 
 	// some initial condition
-	un->mesh[GRID_SIZE / 2][GRID_SIZE / 2] = 1;
+	for (int i = (GRID_SIZE / 2) - 60; i < (GRID_SIZE / 2) - 50; i++)
+		for (int j = (GRID_SIZE / 2) - 180; j < (GRID_SIZE / 2) - 120; j++)
+			un->mesh[i][j] = (double) rand() / (RAND_MAX);
 
 	minValue = 0;
 	maxValue = 1;

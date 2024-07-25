@@ -10,8 +10,8 @@ let sol = new Grid();
 const createWindow = () => {
 	/* generates window with desired settings */
 	const win = new BrowserWindow({
-		width: 600,
-		height: 600,
+		width: 500,
+		height: 500,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js')
 		}

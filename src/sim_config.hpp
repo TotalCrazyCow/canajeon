@@ -4,7 +4,7 @@
 
 const int DIMENSION = 2;
 const int GRID_SIZE = 500;
-const double LX = 1000;
+const double LX = 10;
 double DT; //= 1/static_cast<double>(TIME_STEPS);
 const double DX = LX / (GRID_SIZE - 1);
 const double WAVE_SPEED = 1;
