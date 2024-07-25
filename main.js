@@ -1,16 +1,17 @@
 const { app, BrowserWindow, ipcMain } = require('electron/main')
 const path = require('node:path')
-const { drawRoutine } = require("./build/Release/addon.node");
+const { Grid } = require("./build/Release/addon.node");
 
 // the next value is updated upon request from renderer and passed to renderer
 var step = 0
 var frame = ""
+let sol = new Grid();
 
 const createWindow = () => {
 	/* generates window with desired settings */
 	const win = new BrowserWindow({
-		width: 600,
-		height: 600,
+		width: 500,
+		height: 500,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js')
 		}
@@ -20,10 +21,7 @@ const createWindow = () => {
 
 
 const handleDrawReq = () => {
-
-	frame = drawRoutine(step++)
-
-	return frame
+	return sol.drawNext()
 }
 
 

@@ -1,8 +1,8 @@
-var FRAMERATE = 30 // frame per second
+var FRAMERATE = 60 // frame per second
 
 let ctx = target_canvas.getContext("2d");
-target_canvas.width = 600;
-target_canvas.height = 600;
+target_canvas.width = 500;
+target_canvas.height = 500;
 
 var image = new Image();
 
