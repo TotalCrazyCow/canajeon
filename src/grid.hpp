@@ -28,9 +28,10 @@ public:
 private:
 	void granularStep(int ix, int iy);
 	void numericalStep();
-	int colorOfValue(int x, int y);
+	EasyBMP::RGBColor colorOfValue(int x, int y);
 	void colorBitmap();
 	void printSimInfo();
+	void printPixelValue(int x, int y);
 
 	// numerical stuff
 	CalculationMatrix solInMem;

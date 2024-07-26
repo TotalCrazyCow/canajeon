@@ -15,8 +15,10 @@ Grid::Grid(/* args */) : img(GRID_SIZE, GRID_SIZE, "test.bmp", Colors::white)
 
 	// some initial condition
 	for (int i = (GRID_SIZE / 2) - 60; i < (GRID_SIZE / 2) - 50; i++)
-		for (int j = (GRID_SIZE / 2) - 180; j < (GRID_SIZE / 2) - 120; j++)
-			un->mesh[i][j] = (double) rand() / (RAND_MAX);
+		for (int j = (GRID_SIZE / 2) - 180; j < (GRID_SIZE / 2) - 120; j++){
+			//un->mesh[i][j] = (double) rand() / (RAND_MAX);
+			un->mesh[(GRID_SIZE / 2) - 180][(GRID_SIZE / 2) - 140] = 1;
+		}
 
 	minValue = 0;
 	maxValue = 1;
@@ -30,16 +32,23 @@ Grid::~Grid()
 
 void Grid::granularStep(int ix, int iy)
 {
-	double xDoubleDer = (un->mesh[ix + 1][iy] - 2 * un->mesh[ix][iy] + un->mesh[ix - 1][iy]) / DX / DX;
-	double yDoubleDer = (un->mesh[ix][iy + 1] - 2 * un->mesh[ix][iy] + un->mesh[ix][iy - 1]) / DX / DX;
-	unp->mesh[ix][iy] = 2 * un->mesh[ix][iy] - unm->mesh[ix][iy] + WAVE_SPEED * WAVE_SPEED * DT * DT * (xDoubleDer + yDoubleDer);
+	bool isBorder = (ix == 0 || iy == 0 || ix == GRID_SIZE-1 || iy == GRID_SIZE-1) ? true : false;
+
+	if (isBorder) {
+		unp->mesh[ix][iy] = 0; // Dirichlet conditions
+	}
+	else {
+		double xDoubleDer = (un->mesh[ix + 1][iy] - 2 * un->mesh[ix][iy] + un->mesh[ix - 1][iy]) / (DX * DX);
+		double yDoubleDer = (un->mesh[ix][iy + 1] - 2 * un->mesh[ix][iy] + un->mesh[ix][iy - 1]) / (DX * DX);
+		unp->mesh[ix][iy] = 2 * un->mesh[ix][iy] - unm->mesh[ix][iy] + WAVE_SPEED * WAVE_SPEED * DT * DT * (xDoubleDer + yDoubleDer);
+	}
 };
 
 void Grid::numericalStep()
 {
-	for (int ix = 1; ix != (GRID_SIZE - 2); ix++)
+	for (int ix = 0; ix != GRID_SIZE-1; ix++)
 	{
-		for (int iy = 1; iy != (GRID_SIZE - 2); iy++)
+		for (int iy = 0; iy != GRID_SIZE-1; iy++)
 		{
 			granularStep(ix, iy);
 		}
@@ -51,13 +60,18 @@ void Grid::numericalStep()
 	unp = temp;
 };
 
-int Grid::colorOfValue(int x, int y)
+EasyBMP::RGBColor Grid::colorOfValue(int x, int y)
 {
 	// for debug purposes only (checking numerical stability)
-	// if (un->mesh[x][y] > 0.05)
-	// 	std::cout << "u(" << x << "," << y << ") = " << un->mesh[x][y] << std::endl;
+	// if (un->mesh[x][y] > 0.1)
+	// 	printPixelValue(x,y);
 
-	return std::floor(255 * un->mesh[x][y]);
+	int valBlue = std::floor(255 * un->mesh[x][y]);
+	int valGreen = std::floor(valBlue / 4);
+	int valRed = std::floor(valBlue / 16);
+
+	EasyBMP::RGBColor retColor(valRed % 255, valGreen % 255, valBlue % 255);
+	return retColor;
 }
 
 void Grid::colorBitmap()
@@ -66,8 +80,7 @@ void Grid::colorBitmap()
 	{
 		for (int j = 0; j < GRID_SIZE; j++)
 		{
-			int val = colorOfValue(i, j);
-			EasyBMP::RGBColor pixelColor(0, 0, val);
+			EasyBMP::RGBColor pixelColor = colorOfValue(i, j);
 			img.SetPixel(i, j, pixelColor, 0);
 		}
 	}
@@ -91,7 +104,7 @@ void Grid::StepAndWrite(std::string filename)
 
 void Grid::printSimInfo() {
 
-	std::cout << "Simulation configuration: \n";
+	std::cout << "\033[1;32mSimulation configuration: \033[0m\n";
 	std::cout << "DIMENSION = " << DIMENSION << std::endl;
 	std::cout << "GRID_SIZE = " << GRID_SIZE << std::endl;
 	std::cout << "LX = " << LX << std::endl;
@@ -99,3 +112,7 @@ void Grid::printSimInfo() {
 	std::cout << "WAVE_SPEED = " << WAVE_SPEED << std::endl;
 	std::cout << "CFL_MAX = " << CFL_MAX << std::endl << std::endl;
 };
+
+void Grid::printPixelValue(int x, int y) {
+	std::cout << "u(" << x << "," << y << ") = " << un->mesh[x][y] << std::endl;
+}
