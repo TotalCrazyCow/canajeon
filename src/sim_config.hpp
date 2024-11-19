@@ -10,3 +10,5 @@ const double DX = LX / (GRID_SIZE - 1);
 const double WAVE_SPEED = 3;
 
 const double CFL_MAX = 0.25;
+
+const double color_max = 2.0;

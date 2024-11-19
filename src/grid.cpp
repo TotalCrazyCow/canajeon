@@ -1,5 +1,6 @@
 #include "napisan.hpp"
 #include "grid.hpp"
+#include <algorithm>  // std::min, std::max
 
 Grid::Grid(/* args */) : img(GRID_SIZE, GRID_SIZE, "test.bmp", Colors::white)
 {
@@ -13,17 +14,19 @@ Grid::Grid(/* args */) : img(GRID_SIZE, GRID_SIZE, "test.bmp", Colors::white)
 	unp = &solInMem.instant[2];
 	unm = &solInMem.instant[0];
 
+	const double factor0 = 1000, factor1 = 500, factor2=300;
+
 	// some initial condition
 	const int itemp = GRID_SIZE / 2;
-	un->mesh[itemp][itemp] = 2;
-	un->mesh[itemp+1][itemp] = 1;
-	un->mesh[itemp+1][itemp+1] = 0.5;
-	un->mesh[itemp+1][itemp-1] = 0.5;
-	un->mesh[itemp-1][itemp] = 1;
-	un->mesh[itemp-1][itemp+1] = 0.5;
-	un->mesh[itemp-1][itemp-1] = 0.5;
-	un->mesh[itemp][itemp+1] = 1;
-	un->mesh[itemp][itemp-1] = 1;
+	un->mesh[itemp][itemp] = factor0*color_max;
+	un->mesh[itemp+1][itemp] = factor1*color_max;
+	un->mesh[itemp+1][itemp+1] = factor2*color_max;
+	un->mesh[itemp+1][itemp-1] = factor2*color_max;
+	un->mesh[itemp-1][itemp] = factor1*color_max;
+	un->mesh[itemp-1][itemp+1] = factor2*color_max;
+	un->mesh[itemp-1][itemp-1] = factor2*color_max;
+	un->mesh[itemp][itemp+1] = factor1*color_max;
+	un->mesh[itemp][itemp-1] = factor1*color_max;
 
 	minValue = 0;
 	maxValue = 1;
@@ -73,11 +76,13 @@ EasyBMP::RGBColor Grid::colorOfValue(int x, int y)
 	// if (un->mesh[x][y] > 0.1)
 	// 	printPixelValue(x,y);
 
-	int valBlue = std::floor(255 * un->mesh[x][y]);
-	int valGreen = std::floor(valBlue / 4);
-	int valRed = std::floor(valBlue / 16);
+	int saturatedValue = std::clamp(un->mesh[x][y], -color_max, color_max);
 
-	EasyBMP::RGBColor retColor(valRed % 255, valGreen % 255, valBlue % 255);
+	int valBlue = std::floor(127 * (1 + (saturatedValue / color_max)));
+	int valGreen = std::floor(valBlue / 1.21);
+	int valRed = std::floor(valBlue / 1.84);
+
+	EasyBMP::RGBColor retColor(valRed, valGreen, valBlue);
 	return retColor;
 }
 
