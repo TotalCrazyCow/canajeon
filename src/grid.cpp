@@ -14,11 +14,16 @@ Grid::Grid(/* args */) : img(GRID_SIZE, GRID_SIZE, "test.bmp", Colors::white)
 	unm = &solInMem.instant[0];
 
 	// some initial condition
-	for (int i = (GRID_SIZE / 2) - 60; i < (GRID_SIZE / 2) - 50; i++)
-		for (int j = (GRID_SIZE / 2) - 180; j < (GRID_SIZE / 2) - 120; j++){
-			//un->mesh[i][j] = (double) rand() / (RAND_MAX);
-			un->mesh[(GRID_SIZE / 2) - 180][(GRID_SIZE / 2) - 140] = 1;
-		}
+	const int itemp = GRID_SIZE / 2;
+	un->mesh[itemp][itemp] = 2;
+	un->mesh[itemp+1][itemp] = 1;
+	un->mesh[itemp+1][itemp+1] = 0.5;
+	un->mesh[itemp+1][itemp-1] = 0.5;
+	un->mesh[itemp-1][itemp] = 1;
+	un->mesh[itemp-1][itemp+1] = 0.5;
+	un->mesh[itemp-1][itemp-1] = 0.5;
+	un->mesh[itemp][itemp+1] = 1;
+	un->mesh[itemp][itemp-1] = 1;
 
 	minValue = 0;
 	maxValue = 1;
@@ -41,6 +46,8 @@ void Grid::granularStep(int ix, int iy)
 		double xDoubleDer = (un->mesh[ix + 1][iy] - 2 * un->mesh[ix][iy] + un->mesh[ix - 1][iy]) / (DX * DX);
 		double yDoubleDer = (un->mesh[ix][iy + 1] - 2 * un->mesh[ix][iy] + un->mesh[ix][iy - 1]) / (DX * DX);
 		unp->mesh[ix][iy] = 2 * un->mesh[ix][iy] - unm->mesh[ix][iy] + WAVE_SPEED * WAVE_SPEED * DT * DT * (xDoubleDer + yDoubleDer);
+		// hacky fix to stabilise to b.c.	
+		unp->mesh[ix][iy] *= 0.995;
 	}
 };
 
